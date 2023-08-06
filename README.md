@@ -1,5 +1,5 @@
 # AI based Intrusion Detection for In-vehicle networks
-This project is designed to train and test machine learning models on CANBUS data for intrusion detection purposes. It includes the following files:
+This project is designed to train and test machine learning models on CAN bus data for intrusion detection purposes. It includes the following files:
 
 - config.py: A configuration file that allows you to set the file path and the type of training to be performed.
 - trainer.py: Trains the selected machine learning model on the given data.
