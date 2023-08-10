@@ -2,7 +2,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd 
 import numpy as np
 
-def load_data(infile, use_IAT = False, NN = False, numerical = False, window = None, randomise_window=False, split=True):
+def load_data(infile, use_IAT = False, NN = False, numerical = False, window = None, split_mode="train_test", split=True):
     """
     Loads and formats the canbus data and splits it into an array of 
     train and tests subsets. 
@@ -10,7 +10,7 @@ def load_data(infile, use_IAT = False, NN = False, numerical = False, window = N
     Args:
         infile (str): Path to the CSV file containing the data.
         use_IAT (bool): Whether to generate inter-arrival times (IAT) from the data. 
-        NN (bool): Whether to preprocess the data for neural network models.
+        NN (bool): Whether to preprocess the data for deep learning models.
         numerical (bool): Whether to convert the subclasses to numerical. 
         window (int): Size of the  window used for RNN data preparation. 
         split (bool): Whether to split the data into train and test subsets. 
@@ -75,7 +75,12 @@ def load_data(infile, use_IAT = False, NN = False, numerical = False, window = N
         X_test, y_test= custom_ts_multi_data_prep(X, y, train_split, None, window)
         return  X_train, X_test, y_train, y_test
     
-    return train_test_split(X, y, test_size=0.20,random_state=0)
+    if split_mode == "train_test":
+        return train_test_split(X, y, test_size=0.20,random_state=0)
+    elif split_mode == "train_test_validation":
+        X_train, X_test, y_train, y_test = train_test_split(X_train, y, test_size=0.2)
+        X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25)
+        return X_train, X_val, y_train, y_val
 
 def generate_IAT(row, last_IAT, df):
     """
